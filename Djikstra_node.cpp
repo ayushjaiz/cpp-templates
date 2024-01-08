@@ -1,23 +1,28 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int networkDelayTime(vector<vector<int>> &times, int n, int k)
+vector<int> networkDelayTime(vector<vector<int>> &times, int n, int k)
 {
     vector<vector<pair<int, int>>> edges(n + 1, vector<pair<int, int>>());
 
     for (int i = 0; i < times.size(); i++)
     {
-        int u = times[i][0], v = times[i][1], weight = times[i][2];
+        int u, v, weight;
+
+        u = times[i][0], v = times[i][1], weight = times[i][2];
 
         edges[u].push_back({v, weight});
+        edges[v].push_back({u, weight});
     }
 
-    int inf = 1e9;
+    int inf = 1e9;                   // change here
+    int source = 1, destination = n; //
+
     priority_queue<tuple<int, int>, vector<tuple<int, int>>, greater<tuple<int, int>>> pq;
     vector<int> minDistance(n + 1, inf);
 
-    pq.push({0, k});
-    minDistance[k] = 0;
+    pq.push({0, source});
+    minDistance[source] = 0;
 
     while (!pq.empty())
     {
@@ -41,25 +46,25 @@ int networkDelayTime(vector<vector<int>> &times, int n, int k)
             }
         }
     }
-    int ans = *max_element(minDistance.begin() + 1, minDistance.end());
-    return ans == 1e9 ? -1 : ans;
+    return minDistance;
 }
-
-
-
 
 vector<int> dijkstra_with_parent(vector<vector<int>> &times, int n, int source)
 {
     vector<vector<pair<int, int>>> edges(n, vector<pair<int, int>>());
-    int inf = 1e9;
 
     for (int i = 0; i < times.size(); i++)
     {
-        int u = times[i][0], v = times[i][1], weight = times[i][2];
+        int u, v, weight;
+        u = times[i][0], v = times[i][1], weight = times[i][2];
 
         edges[u].push_back({v, weight});
         edges[v].push_back({u, weight});
     }
+
+    int inf = 1e9;                   // change here
+    int source = 1, destination = n; //
+
     priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
     // vector<int> parent(n, -1);
     vector<int> minDistance(n, inf);
