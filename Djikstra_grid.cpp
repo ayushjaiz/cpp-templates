@@ -7,11 +7,13 @@ public:
     int minCost(vector<vector<int>> &grid)
     {
         int n = grid.size(), m = grid[0].size();
-        vector<vector<int>> minDistance(n, vector<int>(m, 1e9));
-        priority_queue<tuple<int, int, int>, vector<tuple<int, int, int>>, greater<tuple<int, int, int>>> pq;
 
+        int inf = 1e9;
         int source_r = 0, source_c = 0;
         int des_r = n - 1, des_c = m - 1;
+
+        vector<vector<int>> minDistance(n, vector<int>(m, inf));
+        priority_queue<tuple<int, int, int>, vector<tuple<int, int, int>>, greater<tuple<int, int, int>>> pq;
 
         pq.push({0, 0, 0});
         minDistance[source_c][source_r] = 0;
@@ -23,6 +25,12 @@ public:
             int dis, row, col;
             tie(dis, row, col) = pq.top();
             pq.pop();
+
+            if (row == des_r and col == des_c)
+                break;
+
+            if (minDistance[row][col] < dis)
+                continue;
 
             for (int i = 0; i < 4; i++)
             {
